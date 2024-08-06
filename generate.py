@@ -264,7 +264,7 @@ def main(
     max_new_tokens: int = 100,
     top_k: int = 200,
     temperature: float = 0.8,
-    checkpoint_path: Path = Path("checkpoints/meta-Transformer/Transformer-2-7b-chat-hf/model.pth"),
+    checkpoint_path: Path = Path("checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth"),
     compile: bool = True,
     compile_prefill: bool = False,
     profile: Optional[Path] = None,
