@@ -1,0 +1,1455 @@
+
+[
+    {
+        "children": [
+            {
+                "children": [],
+                "frame": {
+                    "name": "_Z41fmha_cutlassF_bf16_aligned_64x128_rf_sm80N22PyTorchMemEffAttention15AttentionKernelIN7cutlass10bfloat16_tENS1_4arch4Sm80ELb1ELi64ELi128ELi128ELb1ELb1EE6ParamsE",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 192,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 3408688
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN14at_cuda_detail3cub21DeviceScanByKeyKernelINS0_21DeviceScanByKeyPolicyINS0_22TransformInputIteratorIjN2at6native6mbtopk13BlockIdxToKeyENS0_21CountingInputIteratorIjjEElEEjE9Policy520ESA_PjSD_NS0_24ReduceByKeyScanTileStateIjiLb1EEENS0_8EqualityENS0_3SumENS0_8NullTypeEijjEEvT0_PT9_T1_T2_T3_iT4_T5_T6_T7_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 12,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 44481
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN14at_cuda_detail3cub25DeviceScanByKeyInitKernelINS0_24ReduceByKeyScanTileStateIjiLb1EEENS0_22TransformInputIteratorIjN2at6native6mbtopk13BlockIdxToKeyENS0_21CountingInputIteratorIjjEElEEEEvT_T0_PNSt15iterator_traitsISD_E10value_typeEji",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 12,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 20322
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native13reduce_kernelILi512ELi1ENS0_8ReduceOpIN3c108BFloat16ENS0_9ArgMaxOpsIfEEjlLi4EEEEEvT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 91776
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native13reduce_kernelILi512ELi1ENS0_8ReduceOpIfNS0_7MeanOpsIffffEEjfLi4EEEEEvT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 390,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2532062
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native16triu_tril_kernelIbiLb0ELi8ELb0EEEvNS_4cuda6detail10TensorInfoIT_T0_EENS4_IKS5_S6_EEllS6_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 4576
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastINS0_13BinaryFunctorIfffNS0_15binary_internal10MulFunctorIfEEEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 390,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 1359655
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_EEvS4_RKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 768,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2369325
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_15gpu_kernel_implINS0_13BinaryFunctorIfffNS0_15binary_internal10MulFunctorIfEEEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1537,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 7846293
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_15gpu_kernel_implIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_EEvS4_RKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 384,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2278356
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_15gpu_kernel_implIZZZNS0_51_GLOBAL__N__b1108092_12_PowKernel_cu_2c1f54d4_3150724pow_tensor_tensor_kernelERNS_18TensorIteratorBaseEENKUlvE_clEvENKUlvE5_clEvEUlffE_EEvS5_RKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 5088
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastINS0_13BinaryFunctorIN3c108BFloat16ES5_S5_NS0_15binary_internal10MulFunctorIfEEEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 390,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 1629998
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastINS0_50_GLOBAL__N__e50ef81d_17_CompareKernels_cu_8f1b29aa14CompareFunctorIN3c108BFloat16EEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 23072
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastIZZZNS0_49_GLOBAL__N__d2ba64fb_16_TensorCompare_cu_58b5c4e917where_kernel_implERNS_14TensorIteratorEENKUlvE_clEvENKUlvE10_clEvEUlbN3c108BFloat16ES9_E_EEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 24448
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native18radixSortKVInPlaceILin2ELin1ELi32ELi32EN3c108BFloat16EljEEvNS_4cuda6detail10TensorInfoIT3_T5_EES8_S8_S8_NS6_IT4_S8_EES8_b",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 129279
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native24index_elementwise_kernelILi128ELi4EZNS0_16gpu_index_kernelIZNS0_17index_kernel_implINS0_10OpaqueTypeILi1EEEEEvRNS_18TensorIteratorBaseEN3c108ArrayRefIlEESA_EUlPcPKclE_EEvS7_SA_SA_RKT_EUliE_EEvlT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 40161
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native24index_elementwise_kernelILi128ELi4EZNS0_16gpu_index_kernelIZNS0_17index_kernel_implINS0_10OpaqueTypeILi2EEEEEvRNS_18TensorIteratorBaseEN3c108ArrayRefIlEESA_EUlPcPKclE_EEvS7_SA_SA_RKT_EUliE_EEvlT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 43296
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native24index_elementwise_kernelILi128ELi4EZNS0_16gpu_index_kernelIZNS0_21index_put_kernel_implINS0_10OpaqueTypeILi2EEEEEvRNS_14TensorIteratorEN3c108ArrayRefIlEESA_EUlPcPKclE_EEvRNS_18TensorIteratorBaseESA_SA_RKT_EUliE_EEvlT1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 384,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2250295
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE10_clEvEUlN3c108BFloat16EE_NS_6detail5ArrayIPcLi2EEE23TrivialOffsetCalculatorILi1EjESE_NS0_6memory12LoadWithCastILi1EEENSF_13StoreWithCastILi1EEEEEviT_T0_T1_T2_T3_T4_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 775,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 3841262
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE1_clEvEUliE_NS_6detail5ArrayIPcLi2EEE23TrivialOffsetCalculatorILi1EjESC_NS0_6memory12LoadWithCastILi1EEENSD_13StoreWithCastILi1EEEEEviT_T0_T1_T2_T3_T4_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 15937
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_NS_6detail5ArrayIPcLi2EEE23TrivialOffsetCalculatorILi1EjESC_NS0_6memory12LoadWithCastILi1EEENSD_13StoreWithCastILi1EEEEEviT_T0_T1_T2_T3_T4_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 391,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 1753620
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIN3c108BFloat16EEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 262,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 590274
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIbEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2305
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIfEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2528
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIlEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2112
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13AUnaryFunctorIfffNS0_15binary_internal10MulFunctorIfEEEENS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2336
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BUnaryFunctorIN3c108BFloat16ES4_S4_NS0_15binary_internal10MulFunctorIfEEEENS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 16736
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BUnaryFunctorIfffNS0_15binary_internal10MulFunctorIfEEEENS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2304
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BinaryFunctorIN3c108BFloat16ES4_S4_NS0_15binary_internal10DivFunctorIS4_EEEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 18496
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BinaryFunctorIN3c108BFloat16ES4_S4_NS0_15binary_internal10MulFunctorIfEEEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 192,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 579707
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BinaryFunctorIfffNS0_15binary_internal10MulFunctorIfEEEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 390,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 799674
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_15CUDAFunctor_addIN3c108BFloat16EEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 384,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 1035842
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_15CUDAFunctor_addIfEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 768,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 1563217
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_21CUDAFunctorOnSelf_addIfEENS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 390,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 844299
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_21CUDAFunctorOnSelf_addIiEENS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1194,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 3048816
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_17rsqrt_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE0_clEvENKUlvE0_clEvEUlfE_NS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 390,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 844794
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_22reciprocal_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE_clEvENKUlvE0_clEvEUlfE_NS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 2527
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_23logical_not_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE0_clEvENKUlvE8_clEvEUlbE_NS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 192,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 441305
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_44_GLOBAL__N__50c743a2_11_Indexing_cu_89862edb18masked_fill_kernelERNS_14TensorIteratorERKN3c106ScalarEENKUlvE_clEvENKUlvE10_clEvEUlNS5_8BFloat16EbE_NS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 192,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 387672
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_55_GLOBAL__N__ca79839a_16_ComplexKernel_cu_2c1f54d4_2703617polar_kernel_cudaERNS_14TensorIteratorEENKUlvE_clEvENKUlvE0_clEvEUlffE_NS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 4928
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_62_GLOBAL__N__7d4ed096_23_ActivationSiluKernel_cu_2c1f54d4_2526111silu_kernelERNS_18TensorIteratorBaseEENKUlvE_clEvENKUlvE4_clEvEUlN3c108BFloat16EE_NS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 192,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 566691
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native40_GLOBAL__N__0f1a8107_8_Shape_cu_49f7391c19CatArrayBatchedCopyINS1_10OpaqueTypeILj4EEEjLi3ELi64ELi64EEEvPT_NS1_25CatArrInputTensorMetadataIS5_T0_XT2_EXT3_EEENS1_16TensorSizeStrideIS8_Lj4EEEiS8_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 1,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 7807
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native40_GLOBAL__N__0f1a8107_8_Shape_cu_49f7391c36CatArrayBatchedCopy_aligned16_contigINS1_10OpaqueTypeILj4EEEjLi1ELi128ELi1EEEvPT_NS1_25CatArrInputTensorMetadataIS5_T0_XT2_EXT3_EEENS1_16TensorSizeStrideIS8_Lj4EEEiS8_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 12,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 38752
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native43_GLOBAL__N__b6de9c8c_10_SoftMax_cu_9f978f6319cunn_SoftMaxForwardILi8EN3c108BFloat16EfS4_NS1_22SoftMaxForwardEpilogueEEEvPT2_PKT0_i",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 143422
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native44_GLOBAL__N__50c743a2_11_Indexing_cu_89862edb21indexSelectSmallIndexIN3c108BFloat16EijLi2ELi2ELin2EEEvNS_4cuda6detail10TensorInfoIT_T1_EENS7_IKS8_S9_EENS7_IKT0_S9_EEiiS9_l",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 45571
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native65_GLOBAL__N__28278f10_32_DistributionExponentialKernel_cu_5881736643distribution_elementwise_grid_stride_kernelIfLi4EZNS0_9templates4cuda21uniform_and_transformIN3c108BFloat16EfLm4EPNS_17CUDAGeneratorImplEZZZNS4_18exponential_kernelIS9_EEvRNS_18TensorIteratorBaseEdT_ENKUlvE_clEvENKUlvE2_clEvEUlfE_EEvSC_T2_T3_EUlP24curandStatePhilox4_32_10E0_ZNS1_27distribution_nullary_kernelIS7_fLi4ES9_SL_SG_EEvSC_SH_RKSI_T4_EUlifE_EEviNS_15PhiloxCudaStateET1_SH_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 18912
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native6mbtopk10gatherTopKIN3c108BFloat16EjLi1EEEvNS_4cuda6detail10TensorInfoIKT_T0_EESA_SA_bjSA_NS7_IS8_SA_EESA_NS7_IlSA_EESA_jjPS8_PjSF_j",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 41917
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native6mbtopk18radixFindKthValuesIN3c108BFloat16EjjLi1EEEvNS_4cuda6detail10TensorInfoIKT_T0_EEjPjjSA_iijT1_SC_PSD_PsPS8_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 12,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 74818
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native6mbtopk25computeBlockwiseKthCountsIjEEvPT_PsjjPj",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 13278
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native6mbtopk29computeBlockwiseWithinKCountsIjEEvPT_PsjibPjj",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 12,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 32960
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN2at6native6mbtopk4fillIjjEEvPT_S3_T0_",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 6,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 12577
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "_ZN50_GLOBAL__N__fa15d16e_17_RangeFactories_cu_38772b0829elementwise_kernel_with_indexIiZZZN2at6native15arange_cuda_outERKN3c106ScalarES6_S6_RNS1_6TensorEENKUlvE_clEvENKUlvE2_clEvEUllE_EEvT_T0_PN15function_traitsISD_E11result_typeE",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 8,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 16447
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "ampere_bf16_s16816gemm_bf16_64x64_sliced1x2_ldg8_f2f_stages_64x5_tn",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 582,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 34164512
+                }
+            },
+            {
+                "children": [],
+                "frame": {
+                    "name": "ampere_bf16_s16816gemm_bf16_64x64_sliced1x2_ldg8_f2f_stages_64x6_tn",
+                    "type": "function"
+                },
+                "metrics": {
+                    "Count": 384,
+                    "DeviceId": "0",
+                    "DeviceType": "CUDA",
+                    "Time (ns)": 16832868
+                }
+            },
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN14at_cuda_detail3cub21DeviceScanByKeyKernelINS0_21DeviceScanByKeyPolicyINS0_22TransformInputIteratorIjN2at6native6mbtopk13BlockIdxToKeyENS0_21CountingInputIteratorIjjEElEEjE9Policy520ESA_PjSD_NS0_24ReduceByKeyScanTileStateIjiLb1EEENS0_8EqualityENS0_3SumENS0_8NullTypeEijjEEvT0_PT9_T1_T2_T3_iT4_T5_T6_T7_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 7040
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN14at_cuda_detail3cub25DeviceScanByKeyInitKernelINS0_24ReduceByKeyScanTileStateIjiLb1EEENS0_22TransformInputIteratorIjN2at6native6mbtopk13BlockIdxToKeyENS0_21CountingInputIteratorIjjEElEEEEvT_T0_PNSt15iterator_traitsISD_E10value_typeEji",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 2688
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native13reduce_kernelILi512ELi1ENS0_8ReduceOpIbNS0_14func_wrapper_tIbZZZNS0_14or_kernel_cudaERNS_14TensorIteratorEENKUlvE_clEvENKUlvE10_clEvEUlbbE_EEjbLi4EEEEEvT1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 238974
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native13reduce_kernelILi512ELi1ENS0_8ReduceOpIbNS0_14func_wrapper_tIbZZZNS0_15and_kernel_cudaERNS_14TensorIteratorEENKUlvE_clEvENKUlvE10_clEvEUlbbE_EEjbLi4EEEEEvT1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 139772
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastIZZZNS0_44_GLOBAL__N__50c743a2_11_Indexing_cu_89862edb18masked_fill_kernelERNS_14TensorIteratorERKN3c106ScalarEENKUlvE_clEvENKUlvE5_clEvEUlfbE_EEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 120031
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastINS0_13BinaryFunctorIN3c108BFloat16ES5_bNS0_51_GLOBAL__N__28ce311f_18_CompareEQKernel_cu_d8008c9616CompareEqFunctorIS5_EEEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 111232
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native18radixSortKVInPlaceILin2ELin1ELi32ELi32EN3c108BFloat16EljEEvNS_4cuda6detail10TensorInfoIT3_T5_EES8_S8_S8_NS6_IT4_S8_EES8_b",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 20545
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native18radixSortKVInPlaceILin2ELin1ELi32ELi32EfljEEvNS_4cuda6detail10TensorInfoIT3_T5_EES6_S6_S6_NS4_IT4_S6_EES6_b",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 51,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1235799
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native18radixSortKVInPlaceILin2ELin1ELi32ELi4EfljEEvNS_4cuda6detail10TensorInfoIT3_T5_EES6_S6_S6_NS4_IT4_S6_EES6_b",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 9,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 79616
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native27unrolled_elementwise_kernelINS0_15CUDAFunctor_addIfEENS_6detail5ArrayIPcLi3EEE23TrivialOffsetCalculatorILi2EjES8_ILi1EjENS0_6memory12LoadWithCastILi2EEENSB_13StoreWithCastILi1EEEEEviT_T0_T1_T2_T3_T4_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 161661
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE2_clEvEUllE_NS_6detail5ArrayIPcLi2EEE23TrivialOffsetCalculatorILi1EjESC_NS0_6memory12LoadWithCastILi1EEENSD_13StoreWithCastILi1EEEEEviT_T0_T1_T2_T3_T4_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 120,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 253051
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIN3c108BFloat16EEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 65,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 140706
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIiEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 9816,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1322333693
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_11FillFunctorIlEENS_6detail5ArrayIPcLi1EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2390,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 3922914
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13AUnaryFunctorIfffNS0_15binary_internal10MulFunctorIfEEEENS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 110201
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BinaryFunctorIN3c108BFloat16ES4_bNS0_51_GLOBAL__N__28ce311f_18_CompareEQKernel_cu_d8008c9616CompareEqFunctorIS4_EEEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 33,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 77375
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_13BinaryFunctorIffbNS0_51_GLOBAL__N__28ce311f_18_CompareEQKernel_cu_d8008c9616CompareEqFunctorIfEEEENS_6detail5ArrayIPcLi3EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 101280
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_16ceil_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE_clEvENKUlvE0_clEvEUlfE_NS_6detail5ArrayIPcLi2EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 93564
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_45_GLOBAL__N__d296b789_7_Lerp_cu_2c1f54d4_3026818lerp_tensor_kernelERNS_18TensorIteratorBaseEENKUlvE0_clEvENKUlvE0_clEvEUlfffE_NS_6detail5ArrayIPcLi4EEEEEviT0_T1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 109468
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native34_scatter_gather_elementwise_kernelILi128ELi4EZNS0_36_cuda_scatter_gather_internal_kernelILb0ENS0_10OpaqueTypeILi4EEEEclINS0_12TensorAssignEEEvRNS_14TensorIteratorElllRKT_EUliE_EEviT1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 120,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 278939
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native55_GLOBAL__N__d25d856e_22_ForeachBinaryOpList_cu_a911ec4325multi_tensor_apply_kernelINS1_18TensorListMetadataILi2EEENS1_14UnaryOpFunctorIiLi2ELi1ELi1EEEJNS0_4CopyIiiEEEEEvT_T0_DpT1_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1193,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 3599025
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native60_GLOBAL__N__2b2da9da_27_DistributionRandomKernel_cu_f88cee4443distribution_elementwise_grid_stride_kernelImLi2EZZZNS0_9templates4cuda21random_from_to_kernelIPNS_17CUDAGeneratorImplEEEvRNS_18TensorIteratorBaseEmlT_ENKUlvE_clEvENKUlvE2_clEvEUlP24curandStatePhilox4_32_10E_ZNS1_27distribution_nullary_kernelIlmLi2ES7_SF_ZZZS5_IS7_EvS9_mlSA_ENKSB_clEvENKSC_clEvEUlmE_EEvS9_T2_RKT3_T4_EUlimE_EEviNS_15PhiloxCudaStateET1_SI_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 2208
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native6mbtopk10gatherTopKIN3c108BFloat16EjLi1EEEvNS_4cuda6detail10TensorInfoIKT_T0_EESA_SA_bjSA_NS7_IS8_SA_EESA_NS7_IlSA_EESA_jjPS8_PjSF_j",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 6784
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native6mbtopk18radixFindKthValuesIN3c108BFloat16EjjLi1EEEvNS_4cuda6detail10TensorInfoIKT_T0_EEjPjjSA_iijT1_SC_PSD_PsPS8_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 12160
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native6mbtopk25computeBlockwiseKthCountsIjEEvPT_PsjjPj",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1856
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native6mbtopk29computeBlockwiseWithinKCountsIjEEvPT_PsjibPjj",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 5376
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN2at6native6mbtopk4fillIjjEEvPT_S3_T0_",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1344
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "_ZN50_GLOBAL__N__fa15d16e_17_RangeFactories_cu_38772b0829elementwise_kernel_with_indexIiZZZN2at6native15arange_cuda_outERKN3c106ScalarES6_S6_RNS1_6TensorEENKUlvE_clEvENKUlvE2_clEvEUllE_EEvT_T0_PN15function_traitsISD_E11result_typeE",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 60,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 107131
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_per_fused__softmax_add_bmm_index_logical_not_masked_fill_zeros_like_4",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 91453
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_per_fused__softmax_lt_scalar_tensor_where_23",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1664
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_per_fused__softmax_lt_scalar_tensor_where_25",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1632
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_per_fused_bmm_3",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 117791
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_per_fused_bmm_6",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 66207
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_poi_fused_index_put_mul_2",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 86690
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__softmax__to_copy_argmax_div_exponential_lt_scalar_tensor_where_26",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 35776
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__softmax_lt_scalar_tensor_where_22",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 3008
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__softmax_lt_scalar_tensor_where_24",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 3040
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_add_embedding_mean_mm_mul_11",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 4544
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_add_embedding_mean_mul_rsqrt_8",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 3744
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_add_mean_mm_mul_19",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 15,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 76190
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_add_mean_mul_16",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 16,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 36673
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_add_mean_mul_rsqrt_18",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 15,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 55198
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_embedding_mean_mul_0",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 4608
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused__to_copy_mean_mul_14",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 16,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 31712
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_add_embedding_mm_13",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 1,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 23904
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_add_mm_20",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 15,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 402781
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_bmm_5",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 32,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 221885
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_div_mm_21",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2413,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 464730439
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_1",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 3090,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 266257285
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_10",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 2515,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 190557542
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_12",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 16,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 946232
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_15",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 3389,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 453526184
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_17",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 4466,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 369877021
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_7",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 16,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 362591
+                        }
+                    },
+                    {
+                        "children": [],
+                        "frame": {
+                            "name": "triton_red_fused_mm_9",
+                            "type": "function"
+                        },
+                        "metrics": {
+                            "Count": 16,
+                            "DeviceId": "0",
+                            "DeviceType": "CUDA",
+                            "Time (ns)": 1644919
+                        }
+                    }
+                ],
+                "frame": {
+                    "name": "decode_one_token",
+                    "type": "function"
+                },
+                "metrics": {
+                    "bytes": 15908544528384
+                }
+            }
+        ],
+        "frame": {
+            "name": "ROOT",
+            "type": "function"
+        },
+        "metrics": {
+            "Count": 0,
+            "Time (ns)": 0,
+            "bytes": 0
+        }
+    },
+    {
+        "CUDA": {
+            "0": {
+                "arch": "80",
+                "bus_width": 5120,
+                "clock_rate": 1410000,
+                "memory_clock_rate": 1593000,
+                "num_sms": 108
+            }
+        }
+    }
+]

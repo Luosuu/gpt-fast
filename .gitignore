@@ -11,6 +11,7 @@ checkpoints
 out
 !data/shakespeare/prepare.py
 wandb
+profile
 
 # downloaded by our tests
 original_model.py

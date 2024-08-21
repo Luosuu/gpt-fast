@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 from torch.nn import functional as F
-
+import triton.profiler as proton
 
 def find_multiple(n: int, k: int) -> int:
     if n % k == 0:
@@ -127,7 +127,7 @@ class Transformer(nn.Module):
         mask = self.causal_mask[None, None, input_pos]
         freqs_cis = self.freqs_cis[input_pos]
         x = self.tok_embeddings(idx)
-
+        # print(f"x.shape in forward of class Transformer: {x.shape}")
         for i, layer in enumerate(self.layers):
             x = layer(x, input_pos, freqs_cis, mask)
         x = self.norm(x)
@@ -178,9 +178,10 @@ class Attention(nn.Module):
             state_dict[prefix + "wqkv.weight"] = torch.cat([wq, wk, wv])
 
     def forward(self, x: Tensor, freqs_cis: Tensor, mask: Tensor, input_pos: Optional[Tensor] = None) -> Tensor:
-        bsz, seqlen, _ = x.shape
+        bsz, seqlen, hidden_dim = x.shape
 
         kv_size = self.n_local_heads * self.head_dim
+        #with proton.scope("compute_qkv"): # cannot apply within torch.compile
         q, k, v = self.wqkv(x).split([self.dim, kv_size, kv_size], dim=-1)
 
         q = q.view(bsz, seqlen, self.n_head, self.head_dim)
@@ -197,10 +198,11 @@ class Attention(nn.Module):
 
         k = k.repeat_interleave(self.n_head // self.n_local_heads, dim=1)
         v = v.repeat_interleave(self.n_head // self.n_local_heads, dim=1)
+        #with proton.scope("scaled dot-product attention"):
         y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask, dropout_p=0.0)
 
         y = y.transpose(1, 2).contiguous().view(bsz, seqlen, self.dim)
-
+        #with proton.scope("compute_attention_output"):
         y = self.wo(y)
         return y
 

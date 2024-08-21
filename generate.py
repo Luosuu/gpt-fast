@@ -365,7 +365,7 @@ def main(
             prof = contextlib.nullcontext()
         else:
             torch.profiler._utils._init_for_cuda_graphs()
-            prof = torch.profiler.profile()
+            prof = torch.profiler.profile(record_shapes=True, with_flops=True, with_modules=True)
         with prof:
             y, metrics = generate(
                 model,
@@ -379,6 +379,8 @@ def main(
                 top_k=top_k,
             )
             aggregate_metrics['accept_counts'].append(metrics['accept_counts'])
+        if not((i != num_samples - 1 or not profile) or (use_tp and rank != 0)): 
+            print(prof.key_averages(group_by_input_shape=True).table(sort_by="cuda_time_total", row_limit=10))
         if i == -1:
             print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
             continue
@@ -420,7 +422,7 @@ if __name__ == '__main__':
     parser.add_argument('--max_new_tokens', type=int, default=200, help='Maximum number of new tokens.')
     parser.add_argument('--top_k', type=int, default=200, help='Top-k for sampling.')
     parser.add_argument('--temperature', type=float, default=0.8, help='Temperature for sampling.')
-    parser.add_argument('--checkpoint_path', type=Path, default=Path("checkpoints/meta-Transformer/Transformer-2-7b-chat-hf/model.pth"), help='Model checkpoint path.')
+    parser.add_argument('--checkpoint_path', type=Path, default=Path("checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth"), help='Model checkpoint path.')
     parser.add_argument('--compile', action='store_true', help='Whether to compile the model.')
     parser.add_argument('--compile_prefill', action='store_true', help='Whether to compile the prefill (improves prefill perf, but higher compile times)')
     parser.add_argument('--profile', type=Path, default=None, help='Profile path.')
