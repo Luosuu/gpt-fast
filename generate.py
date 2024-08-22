@@ -365,7 +365,7 @@ def main(
             prof = contextlib.nullcontext()
         else:
             torch.profiler._utils._init_for_cuda_graphs()
-            prof = torch.profiler.profile(record_shapes=True, with_flops=True, with_modules=True)
+            prof = torch.profiler.profile()
         with prof:
             y, metrics = generate(
                 model,
@@ -381,6 +381,7 @@ def main(
             aggregate_metrics['accept_counts'].append(metrics['accept_counts'])
         if not((i != num_samples - 1 or not profile) or (use_tp and rank != 0)): 
             print(prof.key_averages(group_by_input_shape=True).table(sort_by="cuda_time_total", row_limit=10))
+            torch.profiler.tensorboard_trace_handler("./tensorboard_trace")
         if i == -1:
             print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
             continue

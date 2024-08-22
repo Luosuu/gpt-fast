@@ -13,6 +13,8 @@ import torch
 import torch._dynamo.config
 import torch._inductor.config
 import triton.profiler as proton
+from triton.compiler import CompiledKernel
+from torchinductor_hook import enter, exit
 
 def device_sync(device):
     if "cuda" in device:
@@ -374,7 +376,10 @@ def main(
             torch.profiler._utils._init_for_cuda_graphs()
             prof = torch.profiler.profile()
         with prof:
-            proton.start(f"llama-2-7b-generate-python-rank{rank}", context="shadow")
+            # proton.start(f"llama-2-7b-generate-shadow-rank{rank}", context="shadow")
+            CompiledKernel.launch_enter_hook = enter
+            CompiledKernel.launch_exit_hook = exit
+            proton.start(f"llama-2-7b-generate-hook-rank{rank}")
             y, metrics = generate(
                 model,
                 encoded,
