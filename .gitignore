@@ -3,6 +3,7 @@ __pycache__
 .env
 .DS_Store
 *.egg-info
+*.json
 build
 
 # data

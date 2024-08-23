@@ -13,6 +13,7 @@ import torch
 import torch._dynamo.config
 import torch._inductor.config
 import triton.profiler as proton
+import triton
 from triton.compiler import CompiledKernel
 from torchinductor_hook import enter, exit
 
@@ -30,6 +31,8 @@ torch._inductor.config.triton.unique_kernel_names = True
 torch._inductor.config.fx_graph_cache = True # Experimental feature to reduce compilation times, will be on by default in future
 
 default_device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print(torch.__version__)
+print(triton.__version__)
 
 # support running without installing as a package
 wd = Path(__file__).parent.parent.resolve()
