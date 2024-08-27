@@ -1,5 +1,6 @@
 from triton.profiler.scope import enter_scope, exit_scope
 from triton.compiler import CompiledKernel, LazyDict
+import torch
 
 COMPUTE_METADATA_SCOPE_NAME = "__proton_launch_metadata"
 
@@ -22,11 +23,33 @@ def enter(lazy_dict: LazyDict) -> None:
     # enter_scope(COMPUTE_METADATA_SCOPE_NAME)
     # metadata = lazy_dict.get()
     # exit_scope()
-    print(lazy_dict.data)
-    print(lazy_dict.extras)
     # fn_metrics = {k: metadata[k] for k in TritonHook.metrics if k in metadata}
-    fn_metrics={}
-    metadata={"name": "something"}
+
+    # print(f"torchinductor hook enter - lazy_dict.data: {lazy_dict.data}")
+    # print(f"torchinductor hook enter - lazy_dict.extras: {lazy_dict.extras}")
+    _, (_, kernel_metadata, extra_dict) = lazy_dict.extras[0]
+    # print(f"kernel metadata: {kernel_metadata}")
+    # print(f"extra_dict: {extra_dict}")
+
+    num_warps = kernel_metadata.num_warps
+    num_stages = kernel_metadata.num_stages
+    cluster_x, cluster_y, cluster_z = kernel_metadata.cluster_dims
+    shared_memory = kernel_metadata.shared
+
+    name_keyword = "mm"
+    if name_keyword in lazy_dict.data["name"]:
+        metadata = {
+            'name': f"matmul_<cluster:{cluster_x}x{cluster_y}x{cluster_z}>_<warps:{num_warps}>_<shared:{shared_memory}>_<stages:{num_stages}>"
+        }
+    else:
+        metadata = {
+            "name": lazy_dict.data["name"]
+        }
+        
+    bytes = sum([torch.numel(extra_dict[key])*extra_dict[key].element_size() for key in extra_dict if torch.is_tensor(extra_dict[key])])
+    print(metadata['name'])
+    print(bytes)
+    fn_metrics={"bytes": bytes}
     enter_scope(metadata["name"], triton_op=True, metrics=fn_metrics)
 
 def register_triton_hook() -> None:

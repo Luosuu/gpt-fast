@@ -12,6 +12,7 @@ from typing import Optional, Tuple
 import torch
 import torch._dynamo.config
 import torch._inductor.config
+from torch.nn.attention import SDPBackend, sdpa_kernel
 import triton.profiler as proton
 import triton
 from triton.compiler import CompiledKernel
@@ -76,7 +77,8 @@ def decode_n_tokens(model: Transformer, cur_token: torch.Tensor, input_pos: torc
     new_tokens, new_probs = [], []
     model_size = _get_model_size(model)
     for i in range(num_new_tokens):
-        with torch.backends.cuda.sdp_kernel(enable_flash=False, enable_mem_efficient=False, enable_math=True): # Actually better for Inductor to codegen attention here
+        # with torch.backends.cuda.sdp_kernel(enable_flash=False, enable_mem_efficient=False, enable_math=True): # Actually better for Inductor to codegen attention here
+        with sdpa_kernel(SDPBackend.MATH):
             with proton.scope("decode_one_token", {"bytes": model_size, "flops16": model_size}):
                 next_token, next_prob = decode_one_token(
                     model, cur_token, input_pos, **sampling_kwargs
