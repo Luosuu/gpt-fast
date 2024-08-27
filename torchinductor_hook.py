@@ -46,8 +46,12 @@ def enter(lazy_dict: LazyDict) -> None:
             "name": lazy_dict.data["name"]
         }
         
-    bytes = sum([torch.numel(extra_dict[key])*extra_dict[key].element_size() for key in extra_dict if torch.is_tensor(extra_dict[key])])
     print(metadata['name'])
+    for key in extra_dict:
+        if torch.is_tensor(extra_dict[key]):
+            print(f"{key} shape: {extra_dict[key].shape}")
+
+    bytes = sum([torch.numel(extra_dict[key])*extra_dict[key].element_size() for key in extra_dict if torch.is_tensor(extra_dict[key])])
     print(bytes)
     fn_metrics={"bytes": bytes}
     enter_scope(metadata["name"], triton_op=True, metrics=fn_metrics)
