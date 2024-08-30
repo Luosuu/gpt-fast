@@ -326,6 +326,9 @@ def main(
     torch.manual_seed(1234)
     model_size = _get_model_size(model)
     if compile:
+        # Start a fresh compile for each parameter of the benchmark
+        torch._dynamo.reset()
+
         if is_speculative and use_tp: # and ("cuda" in device):
             torch._inductor.config.triton.cudagraph_trees = False # Bug with cudagraph trees in this case
 
