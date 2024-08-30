@@ -13,6 +13,7 @@ import torch
 import torch._dynamo.config
 import torch._inductor.config
 from torch.nn.attention import SDPBackend, sdpa_kernel
+import torch.distributed as dist
 import triton.profiler as proton
 import triton
 from triton.compiler import CompiledKernel
@@ -399,6 +400,7 @@ def main(
                 temperature=temperature,
                 top_k=top_k,
             )
+            proton.finalize()
             aggregate_metrics['accept_counts'].append(metrics['accept_counts'])
         if i == -1:
             print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
@@ -430,6 +432,10 @@ def main(
     print(f"Average tokens/sec: {torch.mean(torch.tensor(aggregate_metrics['tokens_per_sec'])).item():.2f}")
     print(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
 
+    if use_tp:
+        dist.destroy_process_group()
+
+
 
 if __name__ == '__main__':
     import argparse
@@ -458,4 +464,4 @@ if __name__ == '__main__':
         args.temperature, args.checkpoint_path, args.compile, args.compile_prefill, args.profile, args.draft_checkpoint_path,
         args.speculate_k, args.device
     )
-    proton.finalize()
+    # proton.finalize()
