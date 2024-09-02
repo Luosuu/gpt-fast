@@ -5,6 +5,8 @@ __pycache__
 build
 *.hatchet
 *.json
+*.err
+*.output
 
 # data
 data

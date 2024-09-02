@@ -345,11 +345,12 @@ def main(
 
         if is_speculative:
             global model_forward, logits_to_prob
-            model_forward = torch.compile(model_forward, mode="reduce-overhead", fullgraph=True)
+            # model_forward = torch.compile(model_forward, mode="reduce-overhead", fullgraph=True)
+            model_forward = torch.compile(model_forward, mode="max-autotune", fullgraph=True)
 
         global decode_one_token, prefill
-        decode_one_token = torch.compile(decode_one_token, mode="reduce-overhead", fullgraph=True)
-
+        # decode_one_token = torch.compile(decode_one_token, mode="reduce-overhead", fullgraph=True)
+        decode_one_token = torch.compile(decode_one_token, mode="max-autotune", fullgraph=True)
         # Uncomment to squeeze more perf out of prefill
         if compile_prefill:
             prefill = torch.compile(prefill, fullgraph=True, dynamic=True)
