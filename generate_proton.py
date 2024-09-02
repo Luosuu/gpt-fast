@@ -18,6 +18,9 @@ import triton
 from triton.compiler import CompiledKernel
 from torchinductor_hook import enter, exit
 
+print(torch.__version__)
+print(triton.__version__)
+
 def device_sync(device):
     if "cuda" in device:
         torch.cuda.synchronize(device)

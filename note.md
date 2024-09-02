@@ -36,6 +36,13 @@ pip install -e python
 python -c "import torch; import triton; print(triton.__version__)"
 ```
 
+or simply 
+```bash
+source compile_triton.sh
+```
+
+> sourcing shell scripts means running commands in current shell instead of subshells.
+
 ## Library coode change
 
 triton.compiler.CompiledKernel.launch_metadata
