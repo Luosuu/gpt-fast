@@ -24,6 +24,10 @@ problems:
 
 Don't use BUILD_WITH_CLANG_LLD
 
+```
+conda install conda-forge::libstdcxx
+```
+
 ## Full procedure
 
 ```
@@ -32,9 +36,12 @@ conda activate gpt_fast
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu124 --upgrade --force-reinstall
 git clone https://github.com/triton-lang/triton.git
 cd triton
+pip uninstall pytorch-triton
 pip install -e python
 python -c "import torch; import triton; print(triton.__version__)"
 ```
+
+Ensure 
 
 or simply 
 ```bash

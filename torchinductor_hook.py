@@ -36,7 +36,7 @@ def exit(lazy_dict: LazyDict) -> None:
     exit_scope(triton_op=True)
 
 def enter(lazy_dict: LazyDict) -> None:
-    # enter_scope(COMPUTE_METADATA_SCOPE_NAME)
+    enter_scope(COMPUTE_METADATA_SCOPE_NAME)
     # metadata = lazy_dict.get()
     # exit_scope()
     # fn_metrics = {k: metadata[k] for k in TritonHook.metrics if k in metadata}
@@ -62,7 +62,8 @@ def enter(lazy_dict: LazyDict) -> None:
     #         print(f"{key} shape: {extra_dict[key].shape}")
 
     bytes = sum([torch.numel(extra_dict[key])*extra_dict[key].element_size() for key in extra_dict if torch.is_tensor(extra_dict[key])])
-    # print(metadata['name'])
-    # print(bytes)
+    exit_scope()
+    print(metadata['name'])
+    print(bytes)
     fn_metrics={'bytes': bytes}
     enter_scope(metadata['name'], triton_op=True, metrics=fn_metrics)
