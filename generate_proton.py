@@ -21,6 +21,8 @@ from torchinductor_hook import enter, exit
 print(torch.__version__)
 print(triton.__version__)
 
+# torch._inductor.config.triton.cudagraphs = False
+
 def device_sync(device):
     if "cuda" in device:
         torch.cuda.synchronize(device)
