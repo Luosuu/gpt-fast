@@ -12,6 +12,18 @@ from typing import Optional, Tuple, Union
 import torch
 import torch._dynamo.config
 import torch._inductor.config
+import triton
+
+
+def global_launch_metadata(grid, kernel, args):
+    num_bytes = 0
+    for _, val in args.items():
+        if hasattr(val, "numel") and hasattr(val, "element_size"):
+            num_bytes += val.numel() * val.element_size()
+    return {"bytes": num_bytes}
+
+
+triton.compiler.CompiledKernel.global_launch_metadata_hook = global_launch_metadata
 
 def device_sync(device):
     if "cuda" in device:
@@ -22,11 +34,12 @@ def device_sync(device):
         print(f"device={device} is not yet suppported")
 
 
+torch._inductor.config.triton.cudagraphs = False
 torch._inductor.config.coordinate_descent_tuning = True
 torch._inductor.config.triton.unique_kernel_names = True
 # Experimental features to reduce compilation times, will be on by default in future
-torch._inductor.config.fx_graph_cache = True 
-torch._functorch.config.enable_autograd_cache = True
+torch._inductor.config.fx_graph_cache = False 
+torch._functorch.config.enable_autograd_cache = False
 
 default_device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -281,6 +294,7 @@ def main(
     compile: bool = True,
     compile_prefill: bool = False,
     profile: Optional[Path] = None,
+    use_proton: Optional[bool] = False,
     draft_checkpoint_path: Optional[Path] = None,
     speculate_k: int = 5,
     device=default_device,
@@ -335,14 +349,14 @@ def main(
 
         if is_speculative:
             global model_forward, logits_to_prob
-            model_forward = torch.compile(model_forward, mode="reduce-overhead", fullgraph=True)
+            model_forward = torch.compile(model_forward, mode="max-autotune-no-cudagraphs", fullgraph=True)
 
         global decode_one_token, prefill
-        decode_one_token = torch.compile(decode_one_token, mode="reduce-overhead", fullgraph=True)
+        decode_one_token = torch.compile(decode_one_token, mode="max-autotune-no-cudagraphs", fullgraph=True)
 
         # Uncomment to squeeze more perf out of prefill
         if compile_prefill:
-            prefill = torch.compile(prefill, fullgraph=True, dynamic=True)
+            prefill = torch.compile(prefill, fullgraph=True, dynamic=True, options={"triton.cudagraphs":False})
 
 
     aggregate_metrics = {
@@ -351,6 +365,10 @@ def main(
     }
     start = -1 if compile else 0
 
+    import triton.profiler as proton
+    if use_proton and profile:
+        proton.start(f"{profile}_rank_{rank}", hook="triton")
+        
     for i in range(start, num_samples):
         device_sync(device=device) # MKG
         if i >= 0 and interactive:
@@ -378,7 +396,7 @@ def main(
             callback = lambda x : x
         t0 = time.perf_counter()
         import contextlib
-        if (i != num_samples - 1 or not profile) or (use_tp and rank != 0):
+        if (i != num_samples - 1 or not profile) or (use_tp and rank != 0) or use_proton:
             prof = contextlib.nullcontext()
         else:
             torch.profiler._utils._init_for_cuda_graphs()
@@ -419,10 +437,15 @@ def main(
         generated_tokens_sec = tokens_generated / t
         aggregate_metrics['tokens_per_sec'].append(generated_tokens_sec)
         print(f"Time for inference {i + 1}: {t:.02f} sec total, {generated_tokens_sec:.02f} tokens/sec")
+        print(f"Model size: {model_size}")
+        print(f"Tokens generated: {tokens_generated}")
         print(f"Bandwidth achieved: {model_size * generated_tokens_sec / 1e9:.02f} GB/s")
         total_tokens_sec = y.numel() / t
         print(f"FLOPS achieved: {params * total_tokens_sec * 2 / 1e12:.02f} TF/s")
         print()
+    if use_proton and profile:
+        proton.finalize()
+
     print("==========")
     if is_speculative:
         counts_aggregated = [sum(i) for i in zip(*aggregate_metrics['accept_counts'])]
@@ -458,6 +481,7 @@ if __name__ == '__main__':
     parser.add_argument('--compile', action='store_true', help='Whether to compile the model.')
     parser.add_argument('--compile_prefill', action='store_true', help='Whether to compile the prefill (improves prefill perf, but higher compile times)')
     parser.add_argument('--profile', type=Path, default=None, help='Profile path.')
+    parser.add_argument('--use_proton', action='store_true', help='Use proton for profiling')
     parser.add_argument('--speculate_k', type=int, default=5, help='Speculative execution depth.')
     parser.add_argument('--draft_checkpoint_path', type=Path, default=None, help='Draft checkpoint path.')
     parser.add_argument('--device', type=str, default=default_device, help='Device to use')
@@ -465,6 +489,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(
         args.prompt, args.interactive, args.num_samples, args.max_new_tokens, args.batch_size, args.top_k,
-        args.temperature, args.checkpoint_path, args.compile, args.compile_prefill, args.profile, args.draft_checkpoint_path,
+        args.temperature, args.checkpoint_path, args.compile, args.compile_prefill, args.profile, args.use_proton, args.draft_checkpoint_path,
         args.speculate_k, args.device
     )
