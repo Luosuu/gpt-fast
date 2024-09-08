@@ -2,7 +2,7 @@
 
 Use conda to create env and use pip to install packages.
 
-## PyTorch
+## PyTorch Nightly Install
 
 need to be nightly
 
@@ -10,13 +10,14 @@ need to be nightly
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu124 --upgrade --force-reinstall
 ```
 
-## Triton
+## Configure GCC and libstdc++ for compiling Triton locally
 
-after installing nightly PyTorch, build triton from source (not install nightly) to overwrite the old triton shipped with torch.
+After installing nightly PyTorch, 
+- remove the built-in triton by `pip uninstall pytorch-triton`
+- check by `pip list | grep triton`
+- build triton from source (not install nightly) to overwrite the old triton shipped with torch.
 
-remember to delete cache and recopy the source every time changing the compiler
-
-problems:
+GCC module on Rivanna:
 
 `gcc/11.4.0`: build error `collect2 ld exists with 1`
 
@@ -24,24 +25,35 @@ problems:
 
 Don't use BUILD_WITH_CLANG_LLD
 
-```
+Then install the latest `libstdc++` in the conda (should be at least 3.4.32)
+
+```bash
 conda install conda-forge::libstdcxx
+```
+
+Add them to the `LD_LIBRARY_PATH`
+```bash
+export LD_LIBRARY_PATH=/project/bi_dsc_large/fad3ew/.conda/gpt_fast/lib:$LD_LIBRARY_PATH
+```
+
+To check the `libstdc++` version
+```bash
+cd /project/bi_dsc_large/fad3ew/.conda/gpt_fast/lib
+strings libstdc++.so.6 | grep GLIBCXX
 ```
 
 ## Full procedure
 
-```
+```bash
 module load gcc/13.3.0 nccl/2.21.5-CUDA-12.4.1
 conda activate gpt_fast
 pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu124 --upgrade --force-reinstall
 git clone https://github.com/triton-lang/triton.git
-cd triton
+cd triton/python
+pip install .
 pip uninstall pytorch-triton
-pip install -e python
 python -c "import torch; import triton; print(triton.__version__)"
 ```
-
-Ensure 
 
 or simply 
 ```bash
@@ -49,6 +61,12 @@ source compile_triton.sh
 ```
 
 > sourcing shell scripts means running commands in current shell instead of subshells.
+
+when need to checkout a remote branch
+```bash
+git fetch
+git switch -c <local_branch> <upstream>/<branch>
+```
 
 ## Library coode change
 
