@@ -1,4 +1,3 @@
-
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 # All rights reserved.
 
@@ -14,7 +13,6 @@ import torch
 import torch._dynamo.config
 import torch._inductor.config
 import triton
-from torch.nn.attention.flex_attention import BlockMask, create_block_mask
 
 
 def global_launch_metadata(grid, kernel, args):
@@ -45,8 +43,6 @@ torch._functorch.config.enable_autograd_cache = False
 
 default_device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-create_block_mask = torch.compile(create_block_mask)
-
 # support running without installing as a package
 wd = Path(__file__).parent.parent.resolve()
 sys.path.append(str(wd))
@@ -73,40 +69,29 @@ def sample(logits, temperature: float = 1.0, top_k: Optional[int] = None):
     idx_next = multinomial_sample_one_no_sync(probs)
     return idx_next, probs
 
-def roundup(val, multiplier):
-    return ((val - 1) // multiplier + 1) * multiplier
-
-def causal_mask(b, h, q, kv):
-    return q >= kv
-
 def prefill(model: Transformer, x: torch.Tensor, input_pos: torch.Tensor, **sampling_kwargs) -> torch.Tensor:
     # input_pos: [B, S]
-    mask = create_block_mask(causal_mask, 1, 1, input_pos.shape[0], model.max_seq_length, device=x.device)
-    logits = model(mask, x, input_pos)
+    logits = model(x, input_pos)
     return sample(logits, **sampling_kwargs)[0]
 
-def decode_one_token(model: Transformer, x: torch.Tensor, input_pos: torch.Tensor, block_mask: BlockMask, **sampling_kwargs) -> Tuple[torch.Tensor, torch.Tensor]:
+def decode_one_token(model: Transformer, x: torch.Tensor, input_pos: torch.Tensor, **sampling_kwargs) -> Tuple[torch.Tensor, torch.Tensor]:
     # input_pos: [B, 1]
     assert input_pos.shape[-1] == 1
-    block_index = input_pos // block_mask.BLOCK_SIZE[0]
-    mask = block_mask[:, :, block_index]
-    mask.mask_mod = block_mask.mask_mod
-    mask.seq_lengths = (1, model.max_seq_length)
-    logits = model(mask, x, input_pos)
+    logits = model(x, input_pos)
     return sample(logits, **sampling_kwargs)
 
 def decode_n_tokens(model: Transformer, cur_token: torch.Tensor, input_pos: torch.Tensor, num_new_tokens: int, callback=lambda _: _, **sampling_kwargs):
-    block_mask = create_block_mask(causal_mask, 1, 1, model.max_seq_length, model.max_seq_length, device=cur_token.device)
     new_tokens, new_probs = [], []
     for i in range(num_new_tokens):
-        next_token, next_prob = decode_one_token(
-            model, cur_token, input_pos, block_mask, **sampling_kwargs
-        )
-        input_pos += 1
-        new_tokens.append(next_token.clone())
-        callback(new_tokens[-1])
-        new_probs.append(next_prob.clone())
-        cur_token = next_token.clone()
+        with torch.backends.cuda.sdp_kernel(enable_flash=False, enable_mem_efficient=False, enable_math=True): # Actually better for Inductor to codegen attention here
+            next_token, next_prob = decode_one_token(
+                model, cur_token, input_pos, **sampling_kwargs
+            )
+            input_pos += 1
+            new_tokens.append(next_token.clone())
+            callback(new_tokens[-1])
+            new_probs.append(next_prob.clone())
+            cur_token = next_token.clone()
 
     return new_tokens, new_probs
 
@@ -382,85 +367,86 @@ def main(
 
     import triton.profiler as proton
     if use_proton and profile:
-        proton.start(f"{profile}_rank_{rank}", hook="triton")
+        proton.start(f"{profile}_python_rank_{rank}", hook="triton", context="python")
         
-    with proton.scope(name="generate"):
-        for i in range(start, num_samples):
-            device_sync(device=device) # MKG
-            if i >= 0 and interactive:
-                prompt = input("What is your prompt? ")
-                if is_chat:
-                    prompt = f"{B_INST} {prompt.strip()} {E_INST}"
-                encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
+    # with proton.scope(name="generate"):
+    for i in range(start, num_samples):
+        device_sync(device=device) # MKG
+        if i >= 0 and interactive:
+            prompt = input("What is your prompt? ")
+            if is_chat:
+                prompt = f"{B_INST} {prompt.strip()} {E_INST}"
+            encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
 
-            if interactive and i >= 0:
-                buffer = []
-                period_id = tokenizer.encode('.')[0]
-                done_generating = False
-                def callback(x):
-                    nonlocal done_generating
-                    if done_generating:
-                        return
-                    buffer.append(tokenizer.decode([period_id] + x.tolist())[1:])
-                    if x.item() == tokenizer.eos_id():
-                        done_generating = True
-                    if len(buffer) == 4 or done_generating:
-                        print(''.join(buffer), end='', flush=True)
-                        buffer.clear()
-                    # print(, end='', flush=True)
+        if interactive and i >= 0:
+            buffer = []
+            period_id = tokenizer.encode('.')[0]
+            done_generating = False
+            def callback(x):
+                nonlocal done_generating
+                if done_generating:
+                    return
+                buffer.append(tokenizer.decode([period_id] + x.tolist())[1:])
+                if x.item() == tokenizer.eos_id():
+                    done_generating = True
+                if len(buffer) == 4 or done_generating:
+                    print(''.join(buffer), end='', flush=True)
+                    buffer.clear()
+                # print(, end='', flush=True)
+        else:
+            callback = lambda x : x
+        t0 = time.perf_counter()
+        import contextlib
+        if (i != num_samples - 1 or not profile) or (use_tp and rank != 0) or use_proton:
+            prof = contextlib.nullcontext()
+        else:
+            torch.profiler._utils._init_for_cuda_graphs()
+            prof = torch.profiler.profile()
+        with prof:
+            y, metrics = generate(
+                model,
+                encoded,
+                max_new_tokens,
+                batch_size=batch_size,
+                draft_model=draft_model,
+                speculate_k=speculate_k,
+                interactive=interactive,
+                callback=callback,
+                temperature=temperature,
+                top_k=top_k,
+            )
+            aggregate_metrics['accept_counts'].append(metrics['accept_counts'])
+        if i == -1:
+            print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
+            continue
+        if hasattr(prof, "export_chrome_trace"):
+            if use_tp:
+                prof.export_chrome_trace(f"{profile}_rank_{rank}.json")
             else:
-                callback = lambda x : x
-            t0 = time.perf_counter()
-            import contextlib
-            if (i != num_samples - 1 or not profile) or (use_tp and rank != 0) or use_proton:
-                prof = contextlib.nullcontext()
-            else:
-                torch.profiler._utils._init_for_cuda_graphs()
-                prof = torch.profiler.profile()
-            with prof:
-                y, metrics = generate(
-                    model,
-                    encoded,
-                    max_new_tokens,
-                    batch_size=batch_size,
-                    draft_model=draft_model,
-                    speculate_k=speculate_k,
-                    interactive=interactive,
-                    callback=callback,
-                    temperature=temperature,
-                    top_k=top_k,
-                )
-                aggregate_metrics['accept_counts'].append(metrics['accept_counts'])
-            if i == -1:
-                print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
-                continue
-            if hasattr(prof, "export_chrome_trace"):
-                if use_tp:
-                    prof.export_chrome_trace(f"{profile}_rank_{rank}.json")
-                else:
-                    prof.export_chrome_trace(f"{profile}.json")
-            device_sync(device=device) # MKG
-            t = time.perf_counter() - t0
+                prof.export_chrome_trace(f"{profile}.json")
+        device_sync(device=device) # MKG
+        t = time.perf_counter() - t0
 
-            if not interactive:
-                # Just displaying the first generation
-                if batch_size > 1:
-                    print("Only displaying the first generation of the batch")
-                print(tokenizer.decode(y[0].tolist()))
-            else:
-                print()
-            tokens_generated = y.size(-1) - prompt_length
-            generated_tokens_sec = tokens_generated / t
-            aggregate_metrics['tokens_per_sec'].append(generated_tokens_sec)
-            print(f"Time for inference {i + 1}: {t:.02f} sec total, {generated_tokens_sec:.02f} tokens/sec")
-            print(f"Model size: {model_size}")
-            print(f"Tokens generated: {tokens_generated}")
-            print(f"Bandwidth achieved: {model_size * generated_tokens_sec / 1e9:.02f} GB/s")
-            total_tokens_sec = y.numel() / t
-            print(f"FLOPS achieved: {params * total_tokens_sec * 2 / 1e12:.02f} TF/s")
+        if not interactive:
+            # Just displaying the first generation
+            if batch_size > 1:
+                print("Only displaying the first generation of the batch")
+            print(tokenizer.decode(y[0].tolist()))
+        else:
             print()
-        if use_proton and profile:
-            proton.finalize()
+        tokens_generated = y.size(-1) - prompt_length
+        generated_tokens_sec = tokens_generated / t
+        aggregate_metrics['tokens_per_sec'].append(generated_tokens_sec)
+        print(f"Time for inference {i + 1}: {t:.02f} sec total, {generated_tokens_sec:.02f} tokens/sec")
+        print(f"Model size: {model_size}")
+        print(f"Tokens generated: {tokens_generated}")
+        print(f"Bandwidth achieved: {model_size * generated_tokens_sec / 1e9:.02f} GB/s")
+        total_tokens_sec = y.numel() / t
+        print(f"FLOPS achieved: {params * total_tokens_sec * 2 / 1e12:.02f} TF/s")
+        print()
+
+    if use_proton and profile:
+        proton.finalize()
 
     print("==========")
     if is_speculative:

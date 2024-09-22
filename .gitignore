@@ -9,6 +9,8 @@ build
 *.output
 *.so.*
 
+local_test/
+
 # data
 data
 checkpoints
