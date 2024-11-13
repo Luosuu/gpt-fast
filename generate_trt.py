@@ -1,4 +1,3 @@
-
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 # All rights reserved.
 
@@ -14,7 +13,7 @@ import torch
 import torch._dynamo.config
 import torch._inductor.config
 import triton
-from torch.nn.attention.flex_attention import BlockMask, create_block_mask
+import torch_tensorrt
 
 
 def global_launch_metadata(grid, kernel, args):
@@ -45,8 +44,6 @@ torch._functorch.config.enable_autograd_cache = False
 
 default_device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-create_block_mask = torch.compile(create_block_mask)
-
 # support running without installing as a package
 wd = Path(__file__).parent.parent.resolve()
 sys.path.append(str(wd))
@@ -73,40 +70,29 @@ def sample(logits, temperature: float = 1.0, top_k: Optional[int] = None):
     idx_next = multinomial_sample_one_no_sync(probs)
     return idx_next, probs
 
-def roundup(val, multiplier):
-    return ((val - 1) // multiplier + 1) * multiplier
-
-def causal_mask(b, h, q, kv):
-    return q >= kv
-
 def prefill(model: Transformer, x: torch.Tensor, input_pos: torch.Tensor, **sampling_kwargs) -> torch.Tensor:
     # input_pos: [B, S]
-    mask = create_block_mask(causal_mask, 1, 1, input_pos.shape[0], model.max_seq_length, device=x.device)
-    logits = model(mask, x, input_pos)
+    logits = model(x, input_pos)
     return sample(logits, **sampling_kwargs)[0]
 
-def decode_one_token(model: Transformer, x: torch.Tensor, input_pos: torch.Tensor, block_mask: BlockMask, **sampling_kwargs) -> Tuple[torch.Tensor, torch.Tensor]:
+def decode_one_token(model: Transformer, x: torch.Tensor, input_pos: torch.Tensor, **sampling_kwargs) -> Tuple[torch.Tensor, torch.Tensor]:
     # input_pos: [B, 1]
     assert input_pos.shape[-1] == 1
-    block_index = input_pos // block_mask.BLOCK_SIZE[0]
-    mask = block_mask[:, :, block_index]
-    mask.mask_mod = block_mask.mask_mod
-    mask.seq_lengths = (1, model.max_seq_length)
-    logits = model(mask, x, input_pos)
+    logits = model(x, input_pos)
     return sample(logits, **sampling_kwargs)
 
 def decode_n_tokens(model: Transformer, cur_token: torch.Tensor, input_pos: torch.Tensor, num_new_tokens: int, callback=lambda _: _, **sampling_kwargs):
-    block_mask = create_block_mask(causal_mask, 1, 1, model.max_seq_length, model.max_seq_length, device=cur_token.device)
     new_tokens, new_probs = [], []
     for i in range(num_new_tokens):
-        next_token, next_prob = decode_one_token(
-            model, cur_token, input_pos, block_mask, **sampling_kwargs
-        )
-        input_pos += 1
-        new_tokens.append(next_token.clone())
-        callback(new_tokens[-1])
-        new_probs.append(next_prob.clone())
-        cur_token = next_token.clone()
+        with torch.backends.cuda.sdp_kernel(enable_flash=False, enable_mem_efficient=False, enable_math=True): # Actually better for Inductor to codegen attention here
+            next_token, next_prob = decode_one_token(
+                model, cur_token, input_pos, **sampling_kwargs
+            )
+            input_pos += 1
+            new_tokens.append(next_token.clone())
+            callback(new_tokens[-1])
+            new_probs.append(next_prob.clone())
+            cur_token = next_token.clone()
 
     return new_tokens, new_probs
 
@@ -272,7 +258,8 @@ def _load_model(checkpoint_path, device, precision, use_tp):
         from tp import apply_tp
         print("Applying tensor parallel to model ...")
         apply_tp(model)
-
+    
+    print(f"move to device: {device}")
     model = model.to(device=device, dtype=precision)
     return model.eval()
 
@@ -331,7 +318,8 @@ def main(
             print = lambda *args, **kwargs: None
 
     print(f"Using device={device}")
-    precision = torch.bfloat16
+    # precision = torch.bfloat16
+    precision = torch.half
     is_speculative = draft_checkpoint_path is not None
     is_chat = "chat" in str(checkpoint_path)
 
@@ -355,7 +343,6 @@ def main(
         # generate a fully synthetic prompt
         encoded = torch.randint(0, 1024, (prompt,), device=device, dtype=torch.int64)
     prompt_length = encoded.size(-1)
-    assert prompt_length == 64, f"Prompt length should be 64, but got {prompt_length}"
 
     torch.manual_seed(1234)
     model_size, params = _get_model_size(model)
@@ -363,12 +350,16 @@ def main(
         if is_speculative and use_tp: # and ("cuda" in device):
             torch._inductor.config.triton.cudagraph_trees = False # Bug with cudagraph trees in this case
 
+        # configure tensorrt backend
+        torch_tensorrt.runtime.set_multi_device_safe_mode(False)
+        torch_tensorrt.runtime.set_cudagraphs_mode(True)
+
         if is_speculative:
             global model_forward, logits_to_prob
-            model_forward = torch.compile(model_forward, mode="max-autotune-no-cudagraphs", fullgraph=True)
+            model_forward = torch.compile(model_forward, backend="torch_tensorrt")
 
         global decode_one_token, prefill
-        decode_one_token = torch.compile(decode_one_token, mode="max-autotune-no-cudagraphs", fullgraph=True)
+        decode_one_token = torch.compile(decode_one_token, backend="torch_tensorrt")
 
         # Uncomment to squeeze more perf out of prefill
         if compile_prefill:
@@ -383,7 +374,7 @@ def main(
 
     import triton.profiler as proton
     if use_proton and profile:
-        proton.start(f"{profile}_rank_{rank}", hook="triton")
+        proton.start(f"{profile}_rank_{rank}_tensorrt")
         
     with proton.scope(name="generate"):
         for i in range(start, num_samples):
@@ -443,19 +434,19 @@ def main(
             device_sync(device=device) # MKG
             t = time.perf_counter() - t0
 
-            # if not interactive:
+            if not interactive:
                 # Just displaying the first generation
-                # if batch_size > 1:
-                #    print("Only displaying the first generation of the batch")
-                # print(tokenizer.decode(y[0].tolist()))
-            # else:
-            #     print()
+                if batch_size > 1:
+                    print("Only displaying the first generation of the batch")
+                print(tokenizer.decode(y[0].tolist()))
+            else:
+                print()
             tokens_generated = y.size(-1) - prompt_length
             generated_tokens_sec = tokens_generated / t
             aggregate_metrics['tokens_per_sec'].append(generated_tokens_sec)
             print(f"Time for inference {i + 1}: {t:.02f} sec total, {generated_tokens_sec:.02f} tokens/sec")
             print(f"Model size: {model_size}")
-            # print(f"Tokens generated: {tokens_generated}")
+            print(f"Tokens generated: {tokens_generated}")
             print(f"Bandwidth achieved: {model_size * generated_tokens_sec / 1e9:.02f} GB/s")
             total_tokens_sec = y.numel() / t
             print(f"FLOPS achieved: {params * total_tokens_sec * 2 / 1e12:.02f} TF/s")
@@ -490,9 +481,9 @@ if __name__ == '__main__':
     parser.add_argument('--prompt', type=int_or_str, default="Hello, my name is", help="Input prompt. If it's an integer, will instead generate a synthetic prompt.")
     parser.add_argument('--interactive', action='store_true', help='Whether to launch in interactive mode')
     parser.add_argument('--num_samples', type=int, default=5, help='Number of samples.')
-    parser.add_argument('--max_new_tokens', type=int, default=512, help='Maximum number of new tokens.')
+    parser.add_argument('--max_new_tokens', type=int, default=200, help='Maximum number of new tokens.')
     parser.add_argument('--batch_size', type=int, default=1, help='Batch size to benchmark with')
-    parser.add_argument('--top_k', type=int, default=2, help='Top-k for sampling.')
+    parser.add_argument('--top_k', type=int, default=200, help='Top-k for sampling.')
     parser.add_argument('--temperature', type=float, default=0.8, help='Temperature for sampling.')
     parser.add_argument('--checkpoint_path', type=Path, default=Path("checkpoints/meta-Transformer/Transformer-2-7b-chat-hf/model.pth"), help='Model checkpoint path.')
     parser.add_argument('--compile', action='store_true', help='Whether to compile the model.')
