@@ -383,7 +383,11 @@ def main(
 
     import triton.profiler as proton
     if use_proton and profile:
-        proton.start(f"{profile}_rank_{rank}", hook="triton")
+        proton.start(
+            f"{profile}_rank_{rank}", 
+            hook=None,
+            backend="cupti"
+            )
         
     with proton.scope(name="generate"):
         for i in range(start, num_samples):
