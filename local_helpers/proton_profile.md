@@ -19,3 +19,9 @@ torchrun --standalone --nproc_per_node=4 generate.py --compile --checkpoint_path
 ```
 proton-viewer -m time/s,tbyte/s profile/llama-2-7b_rank_None.hatchet -t 0.001 -i "<kernel_name>"
 ```
+
+```bash
+python generate.py --compile --prompt 64 \
+    --checkpoint_path "checkpoints/meta-llama/Llama-2-13b-chat-hf/model.pth" \
+    --profile "profile" --use_proton --profiler-backend "cupti_pcsampling"
+```

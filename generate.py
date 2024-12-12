@@ -310,6 +310,9 @@ def main(
     compile_prefill: bool = False,
     profile: Optional[Path] = None,
     use_proton: Optional[bool] = False,
+    profiler_context: Optional[str] = "shadow",
+    profiler_hook: Optional[str] = None,
+    profiler_backend: Optional[str] = "cupti",
     draft_checkpoint_path: Optional[Path] = None,
     speculate_k: int = 5,
     device=default_device,
@@ -383,10 +386,25 @@ def main(
 
     import triton.profiler as proton
     if use_proton and profile:
+        profile_dir = profile
+        if is_speculative:
+            profile_dir = Path.joinpath(profile_dir, "speculative")
+        profile_dir.mkdir(parents=True, exist_ok=True)  # Create the directory if it doesn't exist
+        model_name = checkpoint_path.parent.name
+        proton_name = str(profile_dir / f"{model_name}_bs{batch_size}_rank{rank}")
+        profiler_context = profiler_context
+        profiler_backend = profiler_backend
+        if profiler_backend == "cupti_pcsampling":
+            proton_name = proton_name + "_instruct"
+        profiler_hook = profiler_hook
+        print("Starting Proton Session...")
+        print(f"Profile name: {proton_name}")
+        print(f"Context: {profiler_context}; Backend: {profiler_backend}; Hook: {profiler_hook}")
         proton.start(
-            f"{profile}_rank_{rank}", 
-            hook=None,
-            backend="cupti"
+            name=proton_name, 
+            context=profiler_context,
+            hook=profiler_hook,
+            backend=profiler_backend
             )
         
     with proton.scope(name="generate"):
@@ -503,6 +521,9 @@ if __name__ == '__main__':
     parser.add_argument('--compile_prefill', action='store_true', help='Whether to compile the prefill (improves prefill perf, but higher compile times)')
     parser.add_argument('--profile', type=Path, default=None, help='Profile path.')
     parser.add_argument('--use_proton', action='store_true', help='Use proton for profiling')
+    parser.add_argument('--profiler-context', type=str, default="shadow", help=('Proton context. Can be shadow or python. By default shadow'))
+    parser.add_argument('--profiler-hook', type=str, default=None, help=('Proton hook. Can be "triton"'))
+    parser.add_argument('--profiler-backend', type=str, default="cupti", help=('Proton backend. use "cupti_pcsampling" for instruction sampling. By default auto select'))
     parser.add_argument('--speculate_k', type=int, default=5, help='Speculative execution depth.')
     parser.add_argument('--draft_checkpoint_path', type=Path, default=None, help='Draft checkpoint path.')
     parser.add_argument('--device', type=str, default=default_device, help='Device to use')
@@ -510,6 +531,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(
         args.prompt, args.interactive, args.num_samples, args.max_new_tokens, args.batch_size, args.top_k,
-        args.temperature, args.checkpoint_path, args.compile, args.compile_prefill, args.profile, args.use_proton, args.draft_checkpoint_path,
-        args.speculate_k, args.device
+        args.temperature, args.checkpoint_path, args.compile, args.compile_prefill, 
+        args.profile, args.use_proton, args.profiler_context, args.profiler_hook, args.profiler_backend,
+        args.draft_checkpoint_path, args.speculate_k, args.device
     )
