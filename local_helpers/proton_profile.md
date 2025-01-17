@@ -2,6 +2,7 @@
 python generate.py --compile --profile "profile/llama-2-7b_scope" --use_proton --checkpoint_path "checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth"
 python generate_no_scope.py --compile --profile "profile/llama-2-7b_no_scope" --use_proton --checkpoint_path "checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth"
 torchrun --standalone --nproc_per_node=4 generate.py --compile --profile "profile/llama-2-7b" --use_proton --checkpoint_path "checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth"
+torchrun --standalone --nproc_per_node=2 generate.py --compile --profile "profile" --use_proton --checkpoint_path "checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth" --prompt 64
 ```
 
 ```bash

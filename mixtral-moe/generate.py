@@ -218,68 +218,78 @@ def main(
     }
     start = -1 if compile else 0
 
-    for i in range(start, num_samples):
-        device_sync(device=device) # MKG
-        if i >= 0 and interactive:
-            prompt = input("What is your prompt? ")
-            if is_chat:
-                prompt = f"{B_INST} {prompt.strip()} {E_INST}"
-            encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
+    import triton.profiler as proton
+    profile_dir = "profile"
+    profile_dir.mkdir(parents=True, exist_ok=True)  # Create the directory if it doesn't exist
+    model_name = checkpoint_path.parent.name
+    proton_name = str(profile_dir / f"{model_name}_rank{rank}")
+    print("Starting Proton Session...")
+    print(f"Profile name: {proton_name}")
+    proton.start(name=proton_name)
 
-        if interactive and i >= 0:
-            buffer = []
-            period_id = tokenizer.encode('.')[0]
-            done_generating = False
-            def callback(x):
-                nonlocal done_generating
-                if done_generating:
-                    return
-                buffer.append(tokenizer.decode([period_id] + x.tolist())[1:])
-                if x.item() == tokenizer.eos_id():
-                    done_generating = True
-                if len(buffer) == 4 or done_generating:
-                    print(''.join(buffer), end='', flush=True)
-                    buffer.clear()
-                # print(, end='', flush=True)
-        else:
-            callback = lambda x : x
-        t0 = time.perf_counter()
-        import contextlib
-        if (i != num_samples - 1 or not profile) or (use_tp and rank != 0):
-            prof = contextlib.nullcontext()
-        else:
-            torch.profiler._utils._init_for_cuda_graphs()
-            prof = torch.profiler.profile()
-        with prof:
-            y = generate(
-                model,
-                encoded,
-                max_new_tokens,
-                interactive=interactive,
-                callback=callback,
-                temperature=temperature,
-                top_k=top_k,
-            )
-        if i == -1:
-            print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
-            continue
-        if hasattr(prof, "export_chrome_trace"):
-            if use_tp:
-                prof.export_chrome_trace(f"{profile}_rank_{rank}.json")
+    with proton.scope(name="generate"):
+        for i in range(start, num_samples):
+            device_sync(device=device) # MKG
+            if i >= 0 and interactive:
+                prompt = input("What is your prompt? ")
+                if is_chat:
+                    prompt = f"{B_INST} {prompt.strip()} {E_INST}"
+                encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
+
+            if interactive and i >= 0:
+                buffer = []
+                period_id = tokenizer.encode('.')[0]
+                done_generating = False
+                def callback(x):
+                    nonlocal done_generating
+                    if done_generating:
+                        return
+                    buffer.append(tokenizer.decode([period_id] + x.tolist())[1:])
+                    if x.item() == tokenizer.eos_id():
+                        done_generating = True
+                    if len(buffer) == 4 or done_generating:
+                        print(''.join(buffer), end='', flush=True)
+                        buffer.clear()
+                    # print(, end='', flush=True)
             else:
-                prof.export_chrome_trace(f"{profile}.json")
-        device_sync(device=device) # MKG
-        t = time.perf_counter() - t0
+                callback = lambda x : x
+            t0 = time.perf_counter()
+            import contextlib
+            if (i != num_samples - 1 or not profile) or (use_tp and rank != 0):
+                prof = contextlib.nullcontext()
+            else:
+                torch.profiler._utils._init_for_cuda_graphs()
+                prof = torch.profiler.profile()
+            with prof:
+                y = generate(
+                    model,
+                    encoded,
+                    max_new_tokens,
+                    interactive=interactive,
+                    callback=callback,
+                    temperature=temperature,
+                    top_k=top_k,
+                )
+            if i == -1:
+                print(f"Compilation time: {time.perf_counter() - t0:.2f} seconds")
+                continue
+            if hasattr(prof, "export_chrome_trace"):
+                if use_tp:
+                    prof.export_chrome_trace(f"{profile}_rank_{rank}.json")
+                else:
+                    prof.export_chrome_trace(f"{profile}.json")
+            device_sync(device=device) # MKG
+            t = time.perf_counter() - t0
 
-        if not interactive:
-            print(tokenizer.decode(y.tolist()))
-        else:
-            print()
-        tokens_generated = y.size(0) - prompt_length
-        tokens_sec = tokens_generated / t
-        aggregate_metrics['tokens_per_sec'].append(tokens_sec)
-        print(f"Time for inference {i + 1}: {t:.02f} sec total, {tokens_sec:.02f} tokens/sec")
-        print(f"Bandwidth achieved: {model_size * tokens_sec / 1e9:.02f} GB/s")
+            if not interactive:
+                print(tokenizer.decode(y.tolist()))
+            else:
+                print()
+            tokens_generated = y.size(0) - prompt_length
+            tokens_sec = tokens_generated / t
+            aggregate_metrics['tokens_per_sec'].append(tokens_sec)
+            print(f"Time for inference {i + 1}: {t:.02f} sec total, {tokens_sec:.02f} tokens/sec")
+            print(f"Bandwidth achieved: {model_size * tokens_sec / 1e9:.02f} GB/s")
 
     print(f"Average tokens/sec: {torch.mean(torch.tensor(aggregate_metrics['tokens_per_sec'])).item():.2f}")
     print(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
