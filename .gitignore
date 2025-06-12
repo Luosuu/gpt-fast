@@ -21,3 +21,7 @@ wandb
 # downloaded by our tests
 original_model.py
 original_adapter.py
+
+# untracked directories
+draft/
+dum_src_dir/
