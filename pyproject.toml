@@ -5,9 +5,17 @@ description = "GPT-Fast with Proton Annotations"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "blobfile>=3.1.0",
+    "huggingface-hub>=1.1.5",
+    "llnl-hatchet>=2025.1.1",
+    "pandas>=2.3.3",
+    "requests>=2.32.5",
+    "safetensors>=0.7.0",
+    "sentencepiece>=0.2.1",
+    "tiktoken>=0.12.0",
     "torch",
     "torchvision",
-    "triton"
+    "triton",
 ]
 
 [project.optional-dependencies]

@@ -244,10 +244,11 @@ def encode_tokens(tokenizer, string, bos=True, device=default_device):
         tokens = [tokenizer.bos_id()] + tokens
     return torch.tensor(tokens, dtype=torch.int, device=device)
 
-def _load_model(checkpoint_path, device, precision, use_tp):
+def _load_model(checkpoint_path, device, precision, use_tp, model_name: Optional[str] = None):
     use_cuda = 'cuda' in device
     with torch.device('meta'):
-        model = Transformer.from_name(checkpoint_path.parent.name)
+        resolved_name = model_name or checkpoint_path.parent.name
+        model = Transformer.from_name(resolved_name)
 
     if "int8" in str(checkpoint_path):
         print("Using int8 weight-only quantization!")
@@ -306,6 +307,7 @@ def main(
     top_k: int = 200,
     temperature: float = 0.8,
     checkpoint_path: Path = Path("checkpoints/meta-Transformer/Transformer-2-7b-chat-hf/model.pth"),
+    model_name: Optional[str] = None,
     compile: bool = True,
     compile_prefill: bool = False,
     profile: Optional[Path] = None,
@@ -314,6 +316,8 @@ def main(
     profiler_hook: Optional[str] = None,
     profiler_backend: Optional[str] = "cupti",
     draft_checkpoint_path: Optional[Path] = None,
+    draft_model_name: Optional[str] = None,
+    tokenizer_path: Optional[Path] = None,
     speculate_k: int = 5,
     device=default_device,
 ) -> None:
@@ -321,7 +325,7 @@ def main(
     """
     assert checkpoint_path.is_file(), checkpoint_path
 
-    tokenizer_path = checkpoint_path.parent / "tokenizer.model"
+    tokenizer_path = tokenizer_path or (checkpoint_path.parent / "tokenizer.model")
     assert tokenizer_path.is_file(), str(tokenizer_path)
 
     global print
@@ -340,17 +344,17 @@ def main(
 
     print("Loading model ...")
     t0 = time.time()
-    model = _load_model(checkpoint_path, device, precision, use_tp)
+    model = _load_model(checkpoint_path, device, precision, use_tp, model_name=model_name)
 
     if is_speculative:
-        draft_model = _load_model(draft_checkpoint_path, device, precision, use_tp)
+        draft_model = _load_model(draft_checkpoint_path, device, precision, use_tp, model_name=draft_model_name)
     else:
         draft_model = None
 
     device_sync(device=device) # MKG
     print(f"Time to load model: {time.time() - t0:.02f} seconds")
 
-    tokenizer = get_tokenizer(tokenizer_path, checkpoint_path)
+    tokenizer = get_tokenizer(tokenizer_path, model_name or checkpoint_path.name)
 
     if isinstance(prompt, str):
         encoded = encode_tokens(tokenizer, prompt, bos=True, device=device)
@@ -358,7 +362,6 @@ def main(
         # generate a fully synthetic prompt
         encoded = torch.randint(0, 1024, (prompt,), device=device, dtype=torch.int64)
     prompt_length = encoded.size(-1)
-    assert prompt_length == 64, f"Prompt length should be 64, but got {prompt_length}"
 
     torch.manual_seed(1234)
     model_size, params = _get_model_size(model)
@@ -517,21 +520,24 @@ if __name__ == '__main__':
     parser.add_argument('--top_k', type=int, default=2, help='Top-k for sampling.')
     parser.add_argument('--temperature', type=float, default=0.8, help='Temperature for sampling.')
     parser.add_argument('--checkpoint_path', type=Path, default=Path("checkpoints/meta-Transformer/Transformer-2-7b-chat-hf/model.pth"), help='Model checkpoint path.')
+    parser.add_argument('--model_name', type=str, default=None, help='Optional model name override when the checkpoint path does not encode it.')
     parser.add_argument('--compile', action='store_true', help='Whether to compile the model.')
     parser.add_argument('--compile_prefill', action='store_true', help='Whether to compile the prefill (improves prefill perf, but higher compile times)')
     parser.add_argument('--profile', type=Path, default=None, help='Profile path.')
     parser.add_argument('--use_proton', action='store_true', help='Use proton for profiling')
     parser.add_argument('--profiler-context', type=str, default="shadow", help=('Proton context. Can be shadow or python. By default shadow'))
-    parser.add_argument('--profiler-hook', type=str, default=None, help=('Proton hook. Can be "triton"'))
+    parser.add_argument('--profiler-hook', type=str, default="triton", help=('Proton hook. Can be "triton"'))
     parser.add_argument('--profiler-backend', type=str, default="cupti", help=('Proton backend. use "cupti_pcsampling" for instruction sampling. By default auto select'))
     parser.add_argument('--speculate_k', type=int, default=5, help='Speculative execution depth.')
     parser.add_argument('--draft_checkpoint_path', type=Path, default=None, help='Draft checkpoint path.')
+    parser.add_argument('--draft_model_name', type=str, default=None, help='Optional draft model name override.')
+    parser.add_argument('--tokenizer_path', type=Path, default=None, help='Optional explicit tokenizer.model path.')
     parser.add_argument('--device', type=str, default=default_device, help='Device to use')
 
     args = parser.parse_args()
     main(
         args.prompt, args.interactive, args.num_samples, args.max_new_tokens, args.batch_size, args.top_k,
-        args.temperature, args.checkpoint_path, args.compile, args.compile_prefill, 
+        args.temperature, args.checkpoint_path, args.model_name, args.compile, args.compile_prefill, 
         args.profile, args.use_proton, args.profiler_context, args.profiler_hook, args.profiler_backend,
-        args.draft_checkpoint_path, args.speculate_k, args.device
+        args.draft_checkpoint_path, args.draft_model_name, args.tokenizer_path, args.speculate_k, args.device
     )
