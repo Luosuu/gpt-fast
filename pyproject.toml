@@ -1,0 +1,49 @@
+[project]
+name = "gpt-fast"
+version = "0.1.0"
+description = "GPT-Fast with Proton Annotations"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "torch",
+    "torchvision",
+    "triton"
+]
+
+[project.optional-dependencies]
+cuda = [
+    "torch==2.9.0+cu128",
+    "torchvision"
+]
+rocm = [
+    "torch",
+    "torchvision",
+]
+
+[tool.uv]
+override-dependencies = [
+    "pytorch-triton-rocm; sys_platform == 'never'",
+]
+
+conflicts = [
+    [
+        {extra = "cuda"},
+        {extra = "rocm"}
+    ],
+]
+
+[tool.uv.sources]
+triton = { path = "./submodules/triton", editable=true}
+torch = [ 
+    { index = "pytorch", extra = "cuda"},
+    { url =  "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"},
+]
+torchvision = [
+    { index = "pytorch", extra = "cuda" },
+    { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl", extra = "rocm"}
+]
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
