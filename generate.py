@@ -18,14 +18,20 @@ from torch.nn.attention.flex_attention import BlockMask, create_block_mask
 
 
 def global_launch_metadata(grid, kernel, args):
+    metadata = dict(kernel._asdict())
+    metadata["grid"] = grid
     num_bytes = 0
     for _, val in args.items():
         if hasattr(val, "numel") and hasattr(val, "element_size"):
             num_bytes += val.numel() * val.element_size()
-    return {"bytes": num_bytes}
+    metadata["bytes"] = num_bytes
+    return metadata
 
 
 triton.compiler.CompiledKernel.global_launch_metadata_hook = global_launch_metadata
+
+torch.compiler.reset()
+torch._dynamo.reset()
 
 def device_sync(device):
     if "cuda" in device:
@@ -526,7 +532,7 @@ if __name__ == '__main__':
     parser.add_argument('--profile', type=Path, default=None, help='Profile path.')
     parser.add_argument('--use_proton', action='store_true', help='Use proton for profiling')
     parser.add_argument('--profiler-context', type=str, default="shadow", help=('Proton context. Can be shadow or python. By default shadow'))
-    parser.add_argument('--profiler-hook', type=str, default="triton", help=('Proton hook. Can be "triton"'))
+    parser.add_argument('--profiler-hook', type=str, default=None, help=('Proton hook. Can be "triton"'))
     parser.add_argument('--profiler-backend', type=str, default="cupti", help=('Proton backend. use "cupti_pcsampling" for instruction sampling. By default auto select'))
     parser.add_argument('--speculate_k', type=int, default=5, help='Speculative execution depth.')
     parser.add_argument('--draft_checkpoint_path', type=Path, default=None, help='Draft checkpoint path.')

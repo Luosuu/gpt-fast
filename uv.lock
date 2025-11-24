@@ -13,7 +13,10 @@ conflicts = [[
 ]]
 
 [manifest]
-overrides = [{ name = "pytorch-triton-rocm", marker = "sys_platform == 'never'" }]
+overrides = [
+    { name = "pytorch-triton-rocm", marker = "sys_platform == 'never'" },
+    { name = "triton", editable = "submodules/triton" },
+]
 
 [[package]]
 name = "anyio"
@@ -270,20 +273,20 @@ dependencies = [
     { name = "sentencepiece" },
     { name = "tiktoken" },
     { name = "torch", version = "2.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
-    { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-8-gpt-fast-cuda'" },
+    { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-8-gpt-fast-cuda'" },
     { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-8-gpt-fast-rocm'" },
-    { name = "torchvision", version = "0.24.0", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
     { name = "torchvision", version = "0.24.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
-    { name = "torchvision", version = "0.24.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
+    { name = "torchvision", version = "0.24.1", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+    { name = "torchvision", version = "0.24.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
     { name = "torchvision", version = "0.25.0.dev20251117+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torchvision-0.25.0.dev20251117%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" }, marker = "extra == 'extra-8-gpt-fast-rocm'" },
     { name = "triton" },
 ]
 
 [package.optional-dependencies]
 cuda = [
-    { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" } },
-    { name = "torchvision", version = "0.24.0", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
-    { name = "torchvision", version = "0.24.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
+    { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" } },
+    { name = "torchvision", version = "0.24.1", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+    { name = "torchvision", version = "0.24.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
 ]
 rocm = [
     { name = "torch", version = "2.10.0.dev20251116+rocm7.0", source = { url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" } },
@@ -301,7 +304,7 @@ requires-dist = [
     { name = "sentencepiece", specifier = ">=0.2.1" },
     { name = "tiktoken", specifier = ">=0.12.0" },
     { name = "torch" },
-    { name = "torch", marker = "extra == 'cuda'", specifier = "==2.9.0+cu128", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "gpt-fast", extra = "cuda" } },
+    { name = "torch", marker = "extra == 'cuda'", specifier = "==2.9.1+cu128", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "gpt-fast", extra = "cuda" } },
     { name = "torch", marker = "extra == 'rocm'", url = "https://download.pytorch.org/whl/nightly/rocm7.0/torch-2.10.0.dev20251116%2Brocm7.0-cp313-cp313-manylinux_2_28_x86_64.whl" },
     { name = "torchvision" },
     { name = "torchvision", marker = "extra == 'cuda'", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "gpt-fast", extra = "cuda" } },
@@ -1392,7 +1395,7 @@ dependencies = [
     { name = "nvidia-nvtx-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm') or (extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
     { name = "setuptools", marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
     { name = "sympy", marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
-    { name = "triton", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm') or (extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+    { name = "triton", marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
     { name = "typing-extensions", marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
 ]
 wheels = [
@@ -1416,7 +1419,7 @@ wheels = [
 
 [[package]]
 name = "torch"
-version = "2.9.0+cu128"
+version = "2.9.1+cu128"
 source = { registry = "https://download.pytorch.org/whl/cu128" }
 resolution-markers = [
     "python_full_version >= '3.15' or platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux'",
@@ -1444,22 +1447,22 @@ dependencies = [
     { name = "nvidia-nvtx-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
     { name = "setuptools", marker = "extra == 'extra-8-gpt-fast-cuda'" },
     { name = "sympy", marker = "extra == 'extra-8-gpt-fast-cuda'" },
-    { name = "triton", marker = "(sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+    { name = "triton", marker = "extra == 'extra-8-gpt-fast-cuda'" },
     { name = "typing-extensions", marker = "extra == 'extra-8-gpt-fast-cuda'" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:4d76f71345af47f022c7fa55edd0c1810d01af89dcb9edcfdfafe3d2a0f7a6b8" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:97def0087f8ef171b9002ea500baffdd440c7bdd559c23c38bbf8781b67e9364" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:9cba9f0fa2e1b70fffdcec1235a1bb727cbff7e7b118ba111b2b7f984b7087e2" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:dacbfc19608e60f78975c47d605c7d39b81afdf1983e93e94c17f60646b131e0" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:8ce575fb71b878f5016df0a8a438c7c28f7f4be270af4119b5ad9ab62b0e470a" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:26effd07b9ee31c2db8988860317ba74361967bb4f9228af5a56907215cc27b5" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:eedef2e65d48c7dc9bb03f92c2a62bdae904382fc5c2773de3de41dce5ffd80a" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:55a2184ed89f2120bc1e2c887ee98e5280dee48bc330e9dfe296aa135a370f7d" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp314-cp314-win_amd64.whl", hash = "sha256:758978c4f0895fd76dd6a434c9157f7d70e8c2fea0bab452322f8b2252fe2e85" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:4b51281e08ec36cd6748c71ac32fa1e45d30090b1c3fdf99ebb30776437734b7" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:ef5939ebcacfe3d4f70774941e79a7c7e23f7918d7d3242428c8f48cc7440c0a" },
-    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.0%2Bcu128-cp314-cp314t-win_amd64.whl", hash = "sha256:f11dae3d2534d985144f5b87d5f15d3d7219f63870c91d82e049fbb12779b3aa" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313-win_amd64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp313-cp313t-win_amd64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314-win_amd64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torch-2.9.1%2Bcu128-cp314-cp314t-win_amd64.whl" },
 ]
 
 [[package]]
@@ -1499,25 +1502,6 @@ provides-extras = ["optree", "opt-einsum", "pyyaml"]
 [[package]]
 name = "torchvision"
 version = "0.24.0"
-source = { registry = "https://download.pytorch.org/whl/cu128" }
-resolution-markers = [
-    "python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux'",
-]
-dependencies = [
-    { name = "numpy", marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
-    { name = "pillow", marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
-    { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
-]
-wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:317a1668d2262db06bd7183231fafce43adb3184b4f276581fc31c5a3fec2b7a" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:030e800b2b20353e763fae2058d88937013c72ffdf916005aee689c83e0e1434" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0-cp314-cp314-manylinux_2_28_aarch64.whl", hash = "sha256:109994439d87638d2540db9884fd9005523a550bbc0cd7f652c56c720c357aed" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:4b5c0001345806806b5fe158dd4d1104de8a8171ba123481f4f020249d65eea2" },
-]
-
-[[package]]
-name = "torchvision"
-version = "0.24.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", marker = "(extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (extra != 'extra-8-gpt-fast-cuda' and extra != 'extra-8-gpt-fast-rocm')" },
@@ -1545,7 +1529,26 @@ wheels = [
 
 [[package]]
 name = "torchvision"
-version = "0.24.0+cu128"
+version = "0.24.1"
+source = { registry = "https://download.pytorch.org/whl/cu128" }
+resolution-markers = [
+    "python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux'",
+]
+dependencies = [
+    { name = "numpy", marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+    { name = "pillow", marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+    { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version < '3.15' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm')" },
+]
+wheels = [
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1-cp313-cp313-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1-cp313-cp313t-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1-cp314-cp314-manylinux_2_28_aarch64.whl" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1-cp314-cp314t-manylinux_2_28_aarch64.whl" },
+]
+
+[[package]]
+name = "torchvision"
+version = "0.24.1+cu128"
 source = { registry = "https://download.pytorch.org/whl/cu128" }
 resolution-markers = [
     "python_full_version >= '3.15' or platform_machine != 'aarch64' or platform_python_implementation != 'CPython' or sys_platform != 'linux'",
@@ -1553,17 +1556,17 @@ resolution-markers = [
 dependencies = [
     { name = "numpy", marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
     { name = "pillow", marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
-    { name = "torch", version = "2.9.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
+    { name = "torch", version = "2.9.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(python_full_version >= '3.15' and extra == 'extra-8-gpt-fast-cuda') or (python_full_version < '3.15' and extra == 'extra-8-gpt-fast-cuda' and extra == 'extra-8-gpt-fast-rocm') or (platform_machine != 'aarch64' and extra == 'extra-8-gpt-fast-cuda') or (platform_python_implementation != 'CPython' and extra == 'extra-8-gpt-fast-cuda') or (sys_platform != 'linux' and extra == 'extra-8-gpt-fast-cuda')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:d594f61269cab0524a1e6f5f9e7e5cb26e4e0bed8ba059f64fd4acdf7cd76d53" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:f82cd941bc36033ebdb2974c83caa2913cc37e6567fe97cdd69f5a568ff182c8" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:ff1c9be01024e6d419aa2551d2c604cec99cb867d39841ee66338fd60981a398" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:5936229aef4146491492356fdd138705a9b4b608566bdbfda3c406ed729853e2" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:0e485d987a1606c942a3e4a867cdd3f77991ddb5b561bae08f70314b7093a331" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp314-cp314-win_amd64.whl", hash = "sha256:b1db7ff3dcbfb414944a8db727c28c983ed1330dff08157cf9acb5f2b402b79d" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:2c341ebb8ccaa6e7767c0fa1f1442a6935691de92c003d98ed5f47c84f8439cb" },
-    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.0%2Bcu128-cp314-cp314t-win_amd64.whl", hash = "sha256:c42d51e5fd12c22c31c296c98f95eb6af675d37cebd203df256bebe0a77ecc83" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:5f7c5e0fa08d2cbee93b6e04bbedd59b5e11462cff6cefd07949217265df2370" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp313-cp313-win_amd64.whl", hash = "sha256:c38b0ece839de439de81ed0e81e915c200975972c0b9419608fa9568aa74ecec" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:5ae2dc0f582215b078d7fd52410fe51f79b801770c53e7cfb8ad04316283017d" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:b50d48f4074039e6067230f123f55404014b849d7c4fe1dac3a1924ea02bbd78" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:3b72e32377e5e91398ddc4579c77784b269652a5795f4b20a5a1d4c80e9bd3dd" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp314-cp314-win_amd64.whl", hash = "sha256:b5528b460d65c64e87301e942f6450d0ae958d919386e01fa682ba5eb77e5c9d" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:45792b58c2a9761da4e1d9d12c4bf5140b6250ef9210f42f716f284cff5566ea" },
+    { url = "https://download.pytorch.org/whl/cu128/torchvision-0.24.1%2Bcu128-cp314-cp314t-win_amd64.whl", hash = "sha256:c129e153561be8992c998f87d099ff74203ac19f8b2aadeb8edfbfd30036f81c" },
 ]
 
 [[package]]

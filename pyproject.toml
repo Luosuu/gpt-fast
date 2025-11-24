@@ -20,7 +20,7 @@ dependencies = [
 
 [project.optional-dependencies]
 cuda = [
-    "torch==2.9.0+cu128",
+    "torch==2.9.1+cu128",
     "torchvision"
 ]
 rocm = [
@@ -31,6 +31,7 @@ rocm = [
 [tool.uv]
 override-dependencies = [
     "pytorch-triton-rocm; sys_platform == 'never'",
+    "triton"
 ]
 
 conflicts = [
